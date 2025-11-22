@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CentauriAI - Briefing Estratégico</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50:'#fff7ed', 100:'#ffedd5', 200:'#fed7aa', 300:'#fdba74', 400:'#fb923c', 500:'#f97316', 600:'#FF4D00', 700:'#c2410c', 800:'#9a3412', 900:'#7c2d12' },
+                        darkbg: { 900:'#0f172a', 800:'#1e293b', 700:'#334155' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .step-active { border-left: 4px solid #FF4D00; background-color: #fff7ed; color: #FF4D00; }
+        .dark .step-active { background-color: #1e293b; border-left-color: #FF4D00; color: #FF4D00; }
+        .step-done { border-left: 4px solid #10b981; color: #10b981; }
+        .dark .step-done { color: #34d399; border-left-color: #34d399; }
+        .hidden-step { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .option-card { transition: all 0.2s; border: 2px solid #e5e7eb; }
+        .dark .option-card { border-color: #334155; background-color: #1e293b; }
+        .option-card:hover { border-color: #fb923c; transform: translateY(-2px); }
+        .dark .option-card:hover { border-color: #FF4D00; }
+        .option-card.selected { border-color: #FF4D00; background-color: #fff7ed; box-shadow: 0 4px 6px -1px rgba(255, 77, 0, 0.1); }
+        .dark .option-card.selected { background-color: #334155; border-color: #FF4D00; }
+        .option-card.selected i { color: #FF4D00; }
+        .dark .option-card.selected i { color: #FF4D00; }
+
+        .obj-tag { transition: all 0.2s; }
+        .obj-tag:hover { background-color: #f3f4f6; }
+        .dark .obj-tag:hover { background-color: #334155; }
+        .obj-tag.selected { background-color: #FF4D00; color: white; border-color: #FF4D00; }
+        .dark .obj-tag.selected { background-color: #FF4D00; border-color: #FF4D00; color: white; }
+
+        .chip-tag { transition: all 0.2s; cursor: pointer; user-select: none; background-color: white; border: 1px solid #e5e7eb; color: #4b5563; }
+        .dark .chip-tag { background-color: #1e293b; border-color: #334155; color: #9ca3af; }
+        .chip-tag:hover { border-color: #FF4D00; color: #FF4D00; }
+        .dark .chip-tag:hover { border-color: #FF4D00; color: #FF4D00; }
+        .chip-tag.active { background-color: #FF4D00; color: white; border-color: #FF4D00; }
+        .dark .chip-tag.active { background-color: #FF4D00; border-color: #FF4D00; color: white; }
+        .selected-tag { } 
+
+        .input-clean { width: 100%; padding: 0.75rem 1rem; border-radius: 0.5rem; border: 1px solid #d1d5db; outline: none; transition: ring 0.2s; background-color: white; color: #1f2937; }
+        .dark .input-clean { background-color: #334155; border-color: #475569; color: #f3f4f6; }
+        .input-clean:focus { ring: 2px; ring-color: #fb923c; border-color: transparent; }
+        .dark .input-clean:focus { ring-color: #FF4D00; }
+        .dark select.input-clean { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
+
+        /* ESTILOS DO MODAL / MARKDOWN DA IA */
+        .ai-content h1, .ai-content h2, .ai-content h3 { margin-top: 1.5em; margin-bottom: 0.5em; font-weight: bold; color: #ea580c; }
+        .dark .ai-content h1, .dark .ai-content h2, .dark .ai-content h3 { color: #fb923c; }
+        .ai-content p { margin-bottom: 1em; line-height: 1.6; }
+        .ai-content ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
+        .ai-content li { margin-bottom: 0.5em; }
+        .ai-content strong { color: #c2410c; font-weight: 700; }
+        .dark .ai-content strong { color: #fdba74; }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden text-gray-800 bg-slate-50 dark:bg-darkbg-900 dark:text-gray-100">
+
+    <aside class="w-72 bg-white dark:bg-darkbg-800 border-r border-gray-200 dark:border-darkbg-700 flex flex-col h-full z-20 shadow-lg flex-shrink-0 transition-colors duration-300">
+        <div class="p-6 border-b border-gray-100 dark:border-darkbg-700 flex items-center space-x-2">
+            <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center text-white shadow-md"><i class="fa-solid fa-infinity"></i></div>
+            <span class="font-bold text-xl tracking-tight text-gray-900 dark:text-white">Centauri<span class="text-primary-600">AI</span></span>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1">
+                <li id="menu-step-1" class="step-active px-6 py-3 flex items-center cursor-pointer text-sm font-semibold transition-colors"><span class="w-6 text-center mr-2 icon-state">1</span> Missão & Contexto</li>
+                <li id="menu-step-2" class="px-6 py-3 flex items-center text-gray-500 dark:text-gray-400 cursor-pointer text-sm font-medium transition-colors"><span class="w-6 text-center mr-2 icon-state">2</span> Descrição Empresarial</li>
+                <li id="menu-step-3" class="px-6 py-3 flex items-center text-gray-500 dark:text-gray-400 cursor-pointer text-sm font-medium transition-colors"><span class="w-6 text-center mr-2 icon-state">3</span> Público-Alvo</li>
+                <li id="menu-step-4" class="px-6 py-3 flex items-center text-gray-500 dark:text-gray-400 cursor-pointer text-sm font-medium transition-colors"><span class="w-6 text-center mr-2 icon-state">4</span> Concorrência</li>
+                <li id="menu-step-5" class="px-6 py-3 flex items-center text-gray-500 dark:text-gray-400 cursor-pointer text-sm font-medium transition-colors"><span class="w-6 text-center mr-2 icon-state">5</span> Validação & Score</li>
+            </ul>
+        </nav>
+        <div class="p-4 bg-gray-50 dark:bg-darkbg-900/50 border-t border-gray-200 dark:border-darkbg-700 flex items-center">
+            <img src="https://ui-avatars.com/api/?name=Victor+Solar&background=FF4D00&color=fff" class="w-8 h-8 rounded-full">
+            <div class="ml-3"><p class="text-sm font-medium">Victor</p><p class="text-xs text-gray-500">Solar Móveis</p></div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full relative overflow-hidden">
+        <header class="bg-white dark:bg-darkbg-800 border-b border-gray-200 dark:border-darkbg-700 flex items-center justify-between h-24 px-10 shadow-sm z-10 flex-shrink-0 transition-colors duration-300">
+            <div class="flex items-center">
+                <h1 class="text-xl font-bold text-gray-800 dark:text-white mr-6" id="header-title">Novo Planejamento Estratégico</h1>
+                 <div class="text-sm text-primary-700 dark:text-primary-400 bg-primary-50 dark:bg-darkbg-700 px-4 py-1.5 rounded-full font-medium border border-primary-100 dark:border-darkbg-600">
+                    <i class="fa-solid fa-brain mr-1"></i> <span id="header-module">Módulo 1: Briefing Inteligente</span>
+                </div>
+            </div>
+           
+            <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-darkbg-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-darkbg-600 transition-colors focus:outline-none border border-transparent dark:border-gray-600 flex items-center justify-center">
+                <i class="fa-solid fa-sun hidden dark:inline-block text-yellow-400"></i>
+                <i class="fa-solid fa-moon inline-block dark:hidden"></i>
+            </button>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 bg-slate-50 dark:bg-darkbg-900 transition-colors duration-300" id="main-scroll-area">
+            <div class="max-w-5xl mx-auto space-y-8 fade-in relative pb-16">
+                
+                <div id="step-content-1">
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <div class="flex items-center mb-6">
+                            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-500 rounded-full flex items-center justify-center mr-3 font-bold">1</div>
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-white">Qual o perfil do negócio?</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tipo de Negócio (Macro)</label>
+                                <div class="relative">
+                                    <select id="business-type" onchange="updateSegments()" class="input-clean appearance-none cursor-pointer">
+                                        <option value="" disabled selected>Selecione a categoria...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Segmento de Atuação</label>
+                                <div class="relative">
+                                    <select id="business-segment" class="input-clean appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                        <option value="">Selecione o tipo de negócio primeiro</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <div class="flex items-center mb-6">
+                            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-500 rounded-full flex items-center justify-center mr-3 font-bold">2</div>
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-white">Como será a ativação da campanha?</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="campaign-container">
+                            <div class="option-card bg-white p-5 rounded-xl cursor-pointer relative" onclick="selectCampaignType(this, 'offline')">
+                                <div class="absolute top-4 right-4 text-gray-300 dark:text-gray-600 check-icon"><i class="fa-regular fa-circle"></i></div>
+                                <div class="w-12 h-12 bg-gray-100 dark:bg-darkbg-700 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 mb-4 icon-bg">
+                                    <i class="fa-solid fa-bullhorn text-xl"></i>
+                                </div>
+                                <h3 class="font-bold text-gray-800 dark:text-white">Campanha Offline</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">Físico e tradicional. TV, Rádio, Outdoor, Impressos e Eventos.</p>
+                            </div>
+                            <div class="option-card bg-white p-5 rounded-xl cursor-pointer relative" onclick="selectCampaignType(this, 'online')">
+                                <div class="absolute top-4 right-4 text-gray-300 dark:text-gray-600 check-icon"><i class="fa-regular fa-circle"></i></div>
+                                <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4 icon-bg">
+                                    <i class="fa-solid fa-globe text-xl"></i>
+                                </div>
+                                <h3 class="font-bold text-gray-800 dark:text-white">Campanha Online</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">100% Digital. Ads, Redes Sociais, CRM, E-mail e Influencers.</p>
+                            </div>
+                            <div class="option-card bg-white p-5 rounded-xl cursor-pointer relative" onclick="selectCampaignType(this, '360')">
+                                <div class="absolute top-4 right-4 text-gray-300 dark:text-gray-600 check-icon"><i class="fa-regular fa-circle"></i></div>
+                                <div class="w-12 h-12 bg-primary-50 dark:bg-primary-900/20 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-500 mb-4 icon-bg">
+                                    <i class="fa-solid fa-arrows-spin text-xl"></i>
+                                </div>
+                                <h3 class="font-bold text-gray-800 dark:text-white">Campanha 360º</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">Híbrida e integrada. Conecta o tráfego digital com a loja física.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <div class="flex items-center mb-2">
+                            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-500 rounded-full flex items-center justify-center mr-3 font-bold">3</div>
+                            <h2 class="text-xl font-bold text-gray-800 dark:text-white">Qual o objetivo principal?</h2>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 ml-11">Selecione o foco prioritário. O sistema ajustará o tom e as KPIs.</p>
+                        
+                        <div class="space-y-6 ml-11" id="objective-container">
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 flex items-center"><i class="fa-solid fa-cash-register mr-2"></i> Foco em Vendas</h4>
+                                <div class="flex flex-wrap gap-3">
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Aumentar vendas imediatas</button>
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Gerar fluxo para loja física</button>
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Aumentar conversão e-commerce</button>
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Promover ofertas específicas</button>
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Estimular recompra</button>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 flex items-center"><i class="fa-solid fa-magnet mr-2"></i> Foco em Atração & Leads</h4>
+                                <div class="flex flex-wrap gap-3">
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Gerar Leads Qualificados</button>
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Aumentar lista de CRM</button>
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Trazer novos clientes</button>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 flex items-center"><i class="fa-solid fa-star mr-2"></i> Foco em Marca & Branding</h4>
+                                <div class="flex flex-wrap gap-3">
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Reforçar Autoridade</button>
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Lançamento de Coleção/Identidade</button>
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Fortalecer Posicionamento</button>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 flex items-center"><i class="fa-solid fa-calendar-day mr-2"></i> Eventos & Sazonalidade</h4>
+                                <div class="flex flex-wrap gap-3">
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Black Friday / Sazonal</button>
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Inauguração de Loja</button>
+                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Liquidação Relâmpago</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="flex justify-end pt-6 pb-12">
+                        <button onclick="goToStep(2)" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center">
+                            Salvar e Continuar <i class="fa-solid fa-arrow-right ml-3"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="step-content-2" class="hidden-step">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Informações da Empresa</h2>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">A IA estudará estes dados para criar o DNA da marca e a estratégia.</p>
+                        </div>
+                        <div class="bg-primary-50 dark:bg-darkbg-700 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-lg text-xs font-bold border border-primary-100 dark:border-darkbg-600">
+                            <i class="fa-solid fa-robot mr-2"></i>IA Learning Ativado
+                        </div>
+                    </div>
+
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Nome da Empresa</label>
+                                <input type="text" id="empresa_nome" class="input-clean" placeholder="Ex: Solar Móveis e Eletros">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Descrição da Empresa (Quem somos)</label>
+                                <textarea id="empresa_descricao" class="input-clean h-24" placeholder="Descreva de forma clara o que sua empresa faz, para quem vende e como funciona..."></textarea>
+                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1 text-right">Mínimo 50 caracteres</p>
+                            </div>
+                            <div id="container-diferenciais">
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Diferenciais Competitivos (Selecione)</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Preço competitivo</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Atendimento especializado</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Entrega rápida</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Produto exclusivo</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Pós-venda forte</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Variedade de mix</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Garantia ampliada</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Loja Física + Online</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Experiência premium</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="col-span-2 md:col-span-1">
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Tom de Voz da Marca</label>
+                                <div class="relative">
+                                    <select id="empresa_tom_estilo" class="input-clean appearance-none cursor-pointer">
+                                        <option selected disabled>Selecione o tom...</option>
+                                        <option>Profissional</option>
+                                        <option>Divertido</option>
+                                        <option>Consultivo</option>
+                                        <option>Premium</option>
+                                        <option>Energético</option>
+                                        <option>Inspirador</option>
+                                        <option>Técnico</option>
+                                        <option>Simples e direto</option>
+                                        <option>Humanizado</option>
+                                        <option>Jovem e descolado</option>
+                                    </select>
+                                </div>
+                                <input type="text" id="empresa_tom_exemplo" class="input-clean mt-3 text-sm" placeholder="Ex: Usamos gírias, somos muito formais...">
+                            </div>
+                            <div class="col-span-2 md:col-span-1">
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Posicionamento de Mercado</label>
+                                <textarea id="empresa_posicionamento" class="input-clean h-32" placeholder="Como quer ser percebido? (Ex: O mais barato, O mais rápido, O de maior qualidade...)"></textarea>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Público-Alvo (Resumo)</label>
+                                <textarea id="empresa_publico_resumo" class="input-clean h-20" placeholder="Quem é o cliente ideal? Idade, região, necessidades, dores..."></textarea>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Links Úteis para a IA Estudar</label>
+                            <div class="flex gap-2 mb-4">
+                                <input type="text" id="link-input" class="input-clean" placeholder="Cole a URL aqui (Site, Instagram, LP, Concorrente)...">
+                                <button onclick="addLink()" class="bg-primary-100 dark:bg-darkbg-700 hover:bg-primary-200 dark:hover:bg-darkbg-600 text-primary-700 dark:text-primary-400 px-6 rounded-lg font-medium transition-colors">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                            <div id="links-list" class="space-y-2"></div>
+                        </div>
+                        <div class="border-t border-gray-100 dark:border-darkbg-700 pt-6 mt-6">
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Restrições e Observações</label>
+                            <textarea id="empresa_restricoes" class="input-clean h-24 bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-900/30 dark:text-red-100" placeholder="O que NÃO podemos falar? Regras legais, palavras proibidas..."></textarea>
+                        </div>
+                    </section>
+
+                    <div class="flex justify-between pt-6 pb-12">
+                        <button onclick="goToStep(1)" class="px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-darkbg-700 transition-colors">
+                            Voltar
+                        </button>
+                        <button onclick="goToStep(3)" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center">
+                            Salvar e Continuar <i class="fa-solid fa-arrow-right ml-3"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="step-content-3" class="hidden-step">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Mapeamento do Público-Alvo</h2>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Quanto mais detalhes, mais persuasiva será a Copy gerada pela IA.</p>
+                        </div>
+                    </div>
+
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center"><i class="fa-solid fa-id-card mr-2 text-primary-600 dark:text-primary-500"></i> Dados Demográficos</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Faixa Etária</label>
+                                <input type="text" id="publico_idade" class="input-clean" placeholder="Ex: 25 a 45 anos">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Gênero</label>
+                                <div class="relative">
+                                    <select id="publico_genero" class="input-clean appearance-none cursor-pointer">
+                                        <option>Todos</option>
+                                        <option>Masculino</option>
+                                        <option>Feminino</option>
+                                        <option>Majoritariamente Feminino</option>
+                                        <option>Majoritariamente Masculino</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Localização</label>
+                                <input type="text" id="publico_local" class="input-clean" placeholder="Ex: Brasil (Capitais) ou Fortaleza-CE">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Faixa de Renda</label>
+                                <div class="relative">
+                                    <select id="publico_renda" class="input-clean appearance-none cursor-pointer">
+                                        <option disabled selected>Selecione...</option>
+                                        <option>Classe C/D (Econômico)</option>
+                                        <option>Classe C (Médio)</option>
+                                        <option>Classe B (Médio-Alto)</option>
+                                        <option>Classe A (Alto Padrão)</option>
+                                        <option>Luxo / Ultra High</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estado Civil</label>
+                                <div class="relative">
+                                    <select id="publico_civil" class="input-clean appearance-none cursor-pointer">
+                                        <option disabled selected>Selecione...</option>
+                                        <option>Indiferente</option>
+                                        <option>Solteiros</option>
+                                        <option>Casados / Com filhos</option>
+                                        <option>Divorciados</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profissão (Opcional)</label>
+                                <input type="text" id="publico_profissao" class="input-clean" placeholder="Ex: Profissionais liberais, Estudantes...">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <div class="grid grid-cols-1 gap-8">
+                            <div id="container-interesses">
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Principais Interesses</label>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Tecnologia</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Compras online</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Casa & decoração</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Fitness</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Gastronomia</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Moda</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Maternidade</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Games</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Promoções</span>
+                                </div>
+                                <input type="text" class="input-clean text-sm" placeholder="Outros interesses (separe por vírgula)...">
+                            </div>
+
+                            <div id="container-comportamentos">
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Comportamentos de Consumo</label>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Pesquisador de preço</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Compra impulsiva</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Valoriza parcelamento</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Consome Instagram/TikTok</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Assiste Reviews</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Prefere loja física</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Sensível a desconto</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Busca conveniência</span>
+                                </div>
+                                <input type="text" class="input-clean text-sm" placeholder="Outros comportamentos...">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2 flex items-center"><i class="fa-solid fa-user-pen mr-2 text-primary-600 dark:text-primary-500"></i> Persona (Avatar)</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Descreva um personagem que represente seu cliente ideal.</p>
+                        <textarea id="publico_persona" class="input-clean h-32" placeholder="Ex: Maria, 37 anos, mãe de dois filhos. Trabalha fora e busca praticidade para cuidar da casa. Gosta de promoções, mas não abre mão de qualidade..."></textarea>
+                    </section>
+
+                    <section class="bg-gradient-to-r from-primary-50 to-white dark:from-darkbg-800 dark:to-darkbg-900 p-6 rounded-xl shadow-sm border border-primary-100 dark:border-darkbg-700 mb-8 transition-colors">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div id="container-dores">
+                                <label class="block text-sm font-bold text-red-600 dark:text-red-400 mb-3"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Dores e Dificuldades</label>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-red-400 hover:text-red-500 dark:hover:text-red-400" onclick="toggleTag(this, 'red')">Falta de tempo</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-red-400 hover:text-red-500 dark:hover:text-red-400" onclick="toggleTag(this, 'red')">Falta de dinheiro</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-red-400 hover:text-red-500 dark:hover:text-red-400" onclick="toggleTag(this, 'red')">Dúvida na escolha</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-red-400 hover:text-red-500 dark:hover:text-red-400" onclick="toggleTag(this, 'red')">Entrega demorada</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-red-400 hover:text-red-500 dark:hover:text-red-400" onclick="toggleTag(this, 'red')">Medo de errar</span>
+                                </div>
+                                <textarea id="publico_dores_txt" class="input-clean h-24" placeholder="Quais problemas seu produto resolve?"></textarea>
+                            </div>
+
+                            <div id="container-desejos">
+                                <label class="block text-sm font-bold text-green-600 dark:text-green-400 mb-3"><i class="fa-solid fa-star mr-1"></i> Desejos e Aspirações</label>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-green-400 hover:text-green-500 dark:hover:text-green-400" onclick="toggleTag(this, 'green')">Segurança</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-green-400 hover:text-green-500 dark:hover:text-green-400" onclick="toggleTag(this, 'green')">Custo-benefício</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-green-400 hover:text-green-500 dark:hover:text-green-400" onclick="toggleTag(this, 'green')">Status</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-green-400 hover:text-green-500 dark:hover:text-green-400" onclick="toggleTag(this, 'green')">Conforto</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-green-400 hover:text-green-500 dark:hover:text-green-400" onclick="toggleTag(this, 'green')">Praticidade</span>
+                                </div>
+                                <textarea id="publico_desejos_txt" class="input-clean h-24" placeholder="O que ele ganha comprando de você?"></textarea>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="flex justify-between pt-6 pb-12">
+                        <button onclick="goToStep(2)" class="px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-darkbg-700 transition-colors">
+                            Voltar
+                        </button>
+                        <button onclick="goToStep(4)" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center">
+                            Salvar e Continuar <i class="fa-solid fa-arrow-right ml-3"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="step-content-4" class="hidden-step">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Análise de Concorrência</h2>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">O CentauriAI mapeará ameaças e oportunidades para criar uma estratégia superior.</p>
+                        </div>
+                        <div class="flex items-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-4 py-2 rounded-lg text-xs font-bold border border-blue-100 dark:border-blue-800">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Auto-SWOT: Ativado
+                        </div>
+                    </div>
+
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center">
+                            <i class="fa-solid fa-users-viewfinder mr-2 text-primary-600 dark:text-primary-500"></i> Lista de Concorrentes
+                        </h3>
+                        
+                        <div class="bg-gray-50 dark:bg-darkbg-700/50 p-5 rounded-xl border border-gray-200 dark:border-darkbg-600 mb-4 transition-colors">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Nome do Concorrente</label>
+                                    <input type="text" class="input-clean" placeholder="Ex: Loja Y">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Site / Instagram</label>
+                                    <input type="text" class="input-clean" placeholder="https://...">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Tipo</label>
+                                    <select class="input-clean appearance-none cursor-pointer">
+                                        <option>Concorrente Direto</option>
+                                        <option>Concorrente Indireto</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Atuação</label>
+                                    <select class="input-clean appearance-none cursor-pointer">
+                                        <option>Regional (Local)</option>
+                                        <option>Nacional</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="text-sm text-primary-600 dark:text-primary-500 font-bold hover:text-primary-800 dark:hover:text-primary-400 flex items-center transition-colors">
+                                <i class="fa-solid fa-plus-circle mr-2"></i> Adicionar Outro Concorrente
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div id="container-diff-concorrente">
+                                <label class="block text-sm font-bold text-gray-800 dark:text-white mb-3">
+                                    <i class="fa-solid fa-thumbs-up text-green-500 mr-1"></i> Diferenciais Percebidos (Deles)
+                                </label>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">O que eles têm de forte?</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Preço Baixo</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Mix de Produtos</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Entrega Rápida</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Presença Digital</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Lojas Físicas</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Atendimento</span>
+                                </div>
+                                <textarea id="concorrente_diff_txt" class="input-clean h-20 text-sm" placeholder="Detalhe algo se necessário..."></textarea>
+                            </div>
+
+                            <div id="container-fraco-concorrente">
+                                <label class="block text-sm font-bold text-gray-800 dark:text-white mb-3">
+                                    <i class="fa-solid fa-thumbs-down text-red-500 mr-1"></i> Pontos Fracos (Brechas)
+                                </label>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Onde podemos atacar?</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Preços inconsistentes</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Site ruim/lento</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Atendimento ruim</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Pouca criatividade</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Sem garantia</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Frete caro</span>
+                                </div>
+                                <textarea id="concorrente_fraco_txt" class="input-clean h-20 text-sm" placeholder="Outras falhas percebidas..."></textarea>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Estratégias Visíveis</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Descreva as campanhas, ações e narrativas que você já percebeu neles.</p>
+                        <textarea id="concorrencia_estrategias" class="input-clean h-32" placeholder="Ex: Eles fazem muita live no Instagram, usam influenciadores locais e focam muito em 'bota-fora' de estoque..."></textarea>
+                    </section>
+
+                    <section class="bg-gray-50 dark:bg-darkbg-700/50 p-6 rounded-xl border border-gray-200 dark:border-darkbg-600 mb-8 transition-colors">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            
+                            <div>
+                                <label class="block text-sm font-bold text-gray-800 dark:text-white mb-4">Prioridade da Análise</label>
+                                <div class="space-y-3" id="container-analise">
+                                    <label class="flex items-center p-3 bg-white dark:bg-darkbg-800 border border-gray-200 dark:border-darkbg-600 rounded-lg cursor-pointer hover:border-primary-400 transition-all">
+                                        <input type="radio" name="analysis_level" value="Básica" class="text-primary-600 focus:ring-primary-500">
+                                        <div class="ml-3">
+                                            <span class="block text-sm font-bold text-gray-700 dark:text-gray-200">🔎 Básica (Overview)</span>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center p-3 bg-white dark:bg-darkbg-800 border border-primary-500 ring-1 ring-primary-500 rounded-lg cursor-pointer">
+                                        <input type="radio" name="analysis_level" value="Intermediária" class="text-primary-600 focus:ring-primary-500" checked>
+                                        <div class="ml-3">
+                                            <span class="block text-sm font-bold text-primary-700 dark:text-primary-400">📊 Intermediária (Padrão)</span>
+                                            <span class="block text-xs text-gray-500 dark:text-gray-400">Posicionamento + Diferenciais</span>
+                                        </div>
+                                    </label>
+                                    <label class="flex items-center p-3 bg-white dark:bg-darkbg-800 border border-gray-200 dark:border-darkbg-600 rounded-lg cursor-pointer hover:border-primary-400 transition-all">
+                                        <input type="radio" name="analysis_level" value="Avançada" class="text-primary-600 focus:ring-primary-500">
+                                        <div class="ml-3">
+                                            <span class="block text-sm font-bold text-gray-700 dark:text-gray-200">🧠 Avançada (Deep Dive)</span>
+                                            <span class="block text-xs text-gray-500 dark:text-gray-400">Benchmark completo + SWOT</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-gray-800 dark:text-white mb-2">Links Adicionais para Estudo</label>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Catálogos, Ad Library, Landing Pages...</p>
+                                <div class="flex gap-2 mb-4">
+                                    <input type="text" class="input-clean" placeholder="https://...">
+                                    <button class="bg-gray-200 dark:bg-darkbg-600 text-gray-600 dark:text-gray-300 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-darkbg-500 transition-colors"><i class="fa-solid fa-plus"></i></button>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-darkbg-800 p-2 rounded border border-gray-200 dark:border-darkbg-600 transition-colors">
+                                        <i class="fa-solid fa-link mr-2"></i> facebook.com/ads/library/...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="flex justify-between pt-6 pb-12">
+                        <button onclick="goToStep(3)" class="px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-darkbg-700 transition-colors">
+                            Voltar
+                        </button>
+                        <button onclick="goToStep(5)" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center">
+                            <i class="fa-solid fa-chess-board mr-3 text-primary-200"></i> Gerar Matriz Competitiva
+                        </button>
+                    </div>
+                </div>
+
+                <div id="step-content-5" class="hidden-step">
+                    
+                    <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-xl p-8 text-white shadow-lg mb-8 flex justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold mb-1">Revisão Final da Estratégia</h2>
+                            <p class="text-primary-100 text-sm">O CentauriAI revisou 48 pontos do seu planejamento.</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-5xl font-black tracking-tighter">88<span class="text-2xl text-primary-300 font-medium">/100</span></div>
+                            <div class="text-xs font-bold uppercase tracking-wider bg-white/20 px-2 py-1 rounded inline-block mt-1">Estratégia Robusta</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        
+                        <div class="lg:col-span-1 space-y-6">
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white border-b border-gray-200 dark:border-darkbg-700 pb-2">
+                                Checklist de Coerência
+                            </h3>
+                            
+                            <div class="bg-white dark:bg-darkbg-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700">
+                                <h4 class="text-xs font-bold uppercase text-gray-400 mb-3 tracking-wider">Estratégia Geral</h4>
+                                <ul class="space-y-3 text-sm">
+                                    <li class="flex items-center text-gray-700 dark:text-gray-300"><i class="fa-solid fa-circle-check text-green-500 mr-3"></i> Objetivo Claro</li>
+                                    <li class="flex items-center text-gray-700 dark:text-gray-300"><i class="fa-solid fa-circle-check text-green-500 mr-3"></i> KPI Definido</li>
+                                    <li class="flex items-center text-gray-700 dark:text-gray-300"><i class="fa-solid fa-circle-exclamation text-yellow-500 mr-3"></i> Tom de Voz Consistente</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white dark:bg-darkbg-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700">
+                                <h4 class="text-xs font-bold uppercase text-gray-400 mb-3 tracking-wider">Público & Segmentação</h4>
+                                <ul class="space-y-3 text-sm">
+                                    <li class="flex items-center text-gray-700 dark:text-gray-300"><i class="fa-solid fa-circle-check text-green-500 mr-3"></i> Persona Definida</li>
+                                    <li class="flex items-center text-gray-700 dark:text-gray-300"><i class="fa-solid fa-circle-xmark text-red-500 mr-3"></i> Dores Claras (Faltando)</li>
+                                </ul>
+                            </div>
+
+                             <div class="bg-white dark:bg-darkbg-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700">
+                                <h4 class="text-xs font-bold uppercase text-gray-400 mb-3 tracking-wider">Canais & Conteúdo</h4>
+                                <ul class="space-y-3 text-sm">
+                                    <li class="flex items-center text-gray-700 dark:text-gray-300"><i class="fa-solid fa-circle-check text-green-500 mr-3"></i> Canais Coerentes</li>
+                                    <li class="flex items-center text-gray-700 dark:text-gray-300"><i class="fa-solid fa-circle-check text-green-500 mr-3"></i> Mix Offline/Online</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-2 space-y-8">
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-green-50 dark:bg-green-900/20 p-5 rounded-xl border border-green-200 dark:border-green-800">
+                                    <div class="flex items-center mb-2 text-green-700 dark:text-green-400 font-bold">
+                                        <i class="fa-solid fa-lightbulb mr-2"></i> Pontos Fortes
+                                    </div>
+                                    <p class="text-sm text-green-800 dark:text-green-200 leading-relaxed">
+                                        Sua estratégia tem uma mensagem central forte e fácil de lembrar. A jornada do usuário está completa e bem distribuída nos canais digitais.
+                                    </p>
+                                </div>
+                                <div class="bg-yellow-50 dark:bg-yellow-900/20 p-5 rounded-xl border border-yellow-200 dark:border-yellow-800">
+                                    <div class="flex items-center mb-2 text-yellow-700 dark:text-yellow-400 font-bold">
+                                        <i class="fa-solid fa-triangle-exclamation mr-2"></i> Oportunidade
+                                    </div>
+                                    <p class="text-sm text-yellow-800 dark:text-yellow-200 leading-relaxed">
+                                        Sua segmentação está ampla demais. Sugiro adicionar comportamentos específicos de consumo. O funil está forte no topo, mas fraco na conversão.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700">
+                                <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-6">Mapa de Coerência Estratégica</h3>
+                                
+                                <div class="flex flex-col md:flex-row justify-between items-center relative">
+                                    <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700 -z-0"></div>
+
+                                    <div class="relative z-10 flex flex-col items-center mb-6 md:mb-0">
+                                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-green-600 dark:text-green-400">
+                                            <i class="fa-solid fa-users"></i>
+                                        </div>
+                                        <span class="text-xs font-bold mt-2 text-gray-600 dark:text-gray-400 uppercase">Público</span>
+                                        <span class="text-xs text-green-500 font-bold"><i class="fa-solid fa-check"></i> Validado</span>
+                                    </div>
+
+                                    <div class="relative z-10 flex flex-col items-center mb-6 md:mb-0">
+                                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-green-600 dark:text-green-400">
+                                            <i class="fa-solid fa-box-open"></i>
+                                        </div>
+                                        <span class="text-xs font-bold mt-2 text-gray-600 dark:text-gray-400 uppercase">Produto</span>
+                                        <span class="text-xs text-green-500 font-bold"><i class="fa-solid fa-check"></i> Validado</span>
+                                    </div>
+
+                                    <div class="relative z-10 flex flex-col items-center mb-6 md:mb-0">
+                                        <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-yellow-600 dark:text-yellow-400">
+                                            <i class="fa-solid fa-comment-dots"></i>
+                                        </div>
+                                        <span class="text-xs font-bold mt-2 text-gray-600 dark:text-gray-400 uppercase">Mensagem</span>
+                                        <span class="text-xs text-yellow-500 font-bold"><i class="fa-solid fa-exclamation"></i> Ajustar</span>
+                                    </div>
+
+                                    <div class="relative z-10 flex flex-col items-center">
+                                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-green-600 dark:text-green-400">
+                                            <i class="fa-solid fa-share-nodes"></i>
+                                        </div>
+                                        <span class="text-xs font-bold mt-2 text-gray-600 dark:text-gray-400 uppercase">Canais</span>
+                                        <span class="text-xs text-green-500 font-bold"><i class="fa-solid fa-check"></i> Validado</span>
+                                    </div>
+                                </div>
+                                <div class="mt-6 bg-gray-50 dark:bg-darkbg-700/50 p-3 rounded text-xs text-gray-500 dark:text-gray-400 text-center">
+                                    <i class="fa-solid fa-robot mr-1"></i> IA: "A mensagem foca em preço baixo, mas o produto tem características premium. Considere ajustar o benefício principal."
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800 dark:text-white mb-3">Ajustes Rápidos Sugeridos</h3>
+                                <div class="flex flex-wrap gap-3">
+                                    <button class="bg-white dark:bg-darkbg-800 border border-gray-200 dark:border-darkbg-600 px-4 py-2 rounded-lg text-sm hover:border-primary-500 dark:hover:border-primary-500 transition-colors text-gray-600 dark:text-gray-300 flex items-center shadow-sm">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-purple-500 mr-2"></i> Refinar Segmentação
+                                    </button>
+                                    <button class="bg-white dark:bg-darkbg-800 border border-gray-200 dark:border-darkbg-600 px-4 py-2 rounded-lg text-sm hover:border-primary-500 dark:hover:border-primary-500 transition-colors text-gray-600 dark:text-gray-300 flex items-center shadow-sm">
+                                        <i class="fa-solid fa-pen-to-square text-blue-500 mr-2"></i> Reescrever Headline
+                                    </button>
+                                    <button class="bg-white dark:bg-darkbg-800 border border-gray-200 dark:border-darkbg-600 px-4 py-2 rounded-lg text-sm hover:border-primary-500 dark:hover:border-primary-500 transition-colors text-gray-600 dark:text-gray-300 flex items-center shadow-sm">
+                                        <i class="fa-solid fa-plus text-green-500 mr-2"></i> Adicionar Canal Faltante
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-8 pb-12 border-t border-gray-200 dark:border-darkbg-700 mt-8">
+                        <button onclick="goToStep(4)" class="px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-darkbg-700 transition-colors">
+                            Voltar e Corrigir
+                        </button>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-400 mb-2 mr-1">Ao clicar, seus entregáveis (PDF, Excel, ZIP) serão gerados.</p>
+                            <button onclick="gerarJSONFinal()" class="bg-gradient-to-r from-gray-900 to-black dark:from-white dark:to-gray-200 hover:shadow-xl text-white dark:text-gray-900 px-10 py-4 rounded-xl font-bold shadow-lg transition-all flex items-center transform hover:scale-105">
+                                <i class="fa-solid fa-rocket mr-3 text-primary-500"></i> FINALIZAR E GERAR ESTRATÉGIA
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div id="result-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 transition-opacity duration-300 opacity-0">
+            <div class="bg-white dark:bg-darkbg-800 w-full max-w-4xl rounded-2xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden transform transition-all scale-95" id="modal-content">
+                <div class="p-6 border-b border-gray-200 dark:border-darkbg-700 flex justify-between items-center bg-gray-50 dark:bg-darkbg-900/50">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
+                        <i class="fa-solid fa-robot text-primary-600 mr-3"></i> Estratégia Gerada
+                    </h2>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white transition-colors">
+                        <i class="fa-solid fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div class="p-8 overflow-y-auto text-gray-700 dark:text-gray-300 leading-relaxed ai-content" id="modal-body">
+                    <div class="flex flex-col items-center justify-center h-64 text-gray-400">
+                        <i class="fa-solid fa-circle-notch fa-spin text-4xl mb-4 text-primary-500"></i>
+                        <p>Aguardando resposta da Inteligência Artificial...</p>
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-200 dark:border-darkbg-700 bg-gray-50 dark:bg-darkbg-900/50 flex justify-end space-x-3">
+                    <button onclick="closeModal()" class="px-6 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium dark:bg-darkbg-800 dark:border-gray-600 dark:text-gray-300">Fechar</button>
+                    <button onclick="window.print()" class="px-6 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-bold shadow-lg flex items-center">
+                        <i class="fa-solid fa-print mr-2"></i> Salvar PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- LÓGICA DE DARK MODE ---
+        function toggleTheme() {
+            const html = document.getElementById('html-root');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.getElementById('html-root').classList.add('dark');
+        }
+
+        // --- LÓGICA DE NAVEGAÇÃO ---
+        function goToStep(stepNumber) {
+            for(let i=1; i<=5; i++) {
+                const el = document.getElementById(`step-content-${i}`);
+                if(el) el.classList.add('hidden-step');
+            }
+            const activeContent = document.getElementById(`step-content-${stepNumber}`);
+            if(activeContent) {
+                activeContent.classList.remove('hidden-step');
+                activeContent.classList.add('fade-in');
+                updateSidebar(stepNumber);
+                const scrollArea = document.getElementById('main-scroll-area');
+                if(scrollArea) scrollArea.scrollTo(0,0);
+            }
+        }
+
+        function updateSidebar(activeStep) {
+            const steps = [1, 2, 3, 4, 5];
+            steps.forEach((idx) => {
+                const el = document.getElementById(`menu-step-${idx}`);
+                if(!el) return;
+                el.classList.remove('step-active', 'step-done', 'text-green-600');
+                el.classList.add('text-gray-500', 'dark:text-gray-400');
+                
+                const icon = el.querySelector('.icon-state');
+                if(icon) icon.innerHTML = idx;
+
+                if (idx < activeStep) {
+                    el.classList.remove('text-gray-500', 'dark:text-gray-400');
+                    el.classList.add('step-done', 'text-green-600');
+                    if(icon) icon.innerHTML = '<i class="fa-solid fa-check"></i>';
+                } else if (idx === activeStep) {
+                    el.classList.remove('text-gray-500', 'dark:text-gray-400');
+                    el.classList.add('step-active');
+                }
+            });
+        }
+
+        // --- INTERATIVIDADE ---
+        function toggleTag(element, colorOverride) {
+            if(colorOverride) {
+                 element.classList.toggle('bg-white');
+                 element.classList.toggle('dark:bg-darkbg-800');
+                 element.classList.toggle('bg-' + colorOverride + '-50');
+                 element.classList.toggle('dark:bg-' + colorOverride + '-900/30');
+                 element.classList.toggle('border-' + colorOverride + '-500');
+                 element.classList.toggle('text-' + colorOverride + '-700');
+                 element.classList.toggle('dark:text-' + colorOverride + '-300');
+                 element.classList.toggle('selected-tag');
+            } else {
+                element.classList.toggle('active');
+                element.classList.toggle('border-primary-500');
+                element.classList.toggle('selected-tag');
+            }
+        }
+
+        function addLink() {
+            const input = document.getElementById('link-input');
+            const url = input.value.trim();
+            const list = document.getElementById('links-list');
+            if(url) {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-gray-50 dark:bg-darkbg-700/50 p-3 rounded border border-gray-200 dark:border-darkbg-600 text-sm fade-in transition-colors added-link-item";
+                div.innerHTML = `
+                    <div class="flex items-center overflow-hidden">
+                        <i class="fa-solid fa-link text-gray-400 dark:text-gray-500 mr-3"></i>
+                        <span class="text-gray-700 dark:text-gray-200 truncate url-text">${url}</span>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600 dark:hover:text-red-300 ml-3 transition-colors"><i class="fa-solid fa-trash"></i></button>
+                `;
+                list.appendChild(div);
+                input.value = ''; 
+            }
+        }
+
+        // --- SELETORES DINÂMICOS ---
+        const businessData = {
+            "Varejo": ["Móveis", "Eletrodomésticos", "Eletrônicos", "Moda", "PetShop", "Supermercado"],
+            "E-commerce": ["Dropshipping", "Marketplace", "DTC"],
+            "Serviços": ["Consultoria", "Marketing", "Saúde", "Educação"]
+        };
+        const typeSelect = document.getElementById('business-type');
+        const segmentSelect = document.getElementById('business-segment');
+        
+        if(typeSelect) {
+            Object.keys(businessData).forEach(k => {
+                let opt = document.createElement('option'); opt.value = k; opt.innerText = k;
+                typeSelect.appendChild(opt);
+            });
+        }
+
+        function updateSegments() {
+            const val = typeSelect.value;
+            segmentSelect.innerHTML = "";
+            segmentSelect.disabled = false;
+            if(businessData[val]) {
+                businessData[val].forEach(s => {
+                    let opt = document.createElement('option'); opt.value = s; opt.innerText = s;
+                    segmentSelect.appendChild(opt);
+                });
+            }
+        }
+
+        function selectCampaignType(el) {
+            document.querySelectorAll('#campaign-container .option-card').forEach(c => {
+                c.classList.remove('selected', 'border-primary-500');
+                c.querySelector('.check-icon').innerHTML = '<i class="fa-regular fa-circle"></i>';
+                c.querySelector('.check-icon').classList.remove('text-primary-600', 'dark:text-primary-500');
+            });
+            el.classList.add('selected');
+            el.querySelector('.check-icon').innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            el.querySelector('.check-icon').classList.add('text-primary-600', 'dark:text-primary-500');
+        }
+
+        function selectObjective(el) {
+            document.querySelectorAll('#objective-container .obj-tag').forEach(t => t.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        // --- FUNÇÕES DE MODAL (NOVO) ---
+        function openModal(contentHTML) {
+            const modal = document.getElementById('result-modal');
+            const body = document.getElementById('modal-body');
+            const contentDiv = document.getElementById('modal-content');
+            
+            if(contentHTML) {
+                body.innerHTML = contentHTML;
+            }
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                contentDiv.classList.remove('scale-95');
+                contentDiv.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('result-modal');
+            const contentDiv = document.getElementById('modal-content');
+            
+            modal.classList.add('opacity-0');
+            contentDiv.classList.remove('scale-100');
+            contentDiv.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function formatMarkdown(text) {
+            if (!text) return "";
+            return text
+                .replace(/^### (.*$)/gim, '<h3 class="text-xl font-bold mt-6 mb-2 text-primary-600">$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold mt-8 mb-4 border-b border-gray-200 pb-2 text-gray-800 dark:text-white">$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mt-4 mb-6 text-primary-600">$1</h1>')
+                .replace(/\*\*(.*)\*\*/gim, '<strong class="text-primary-700 dark:text-primary-400">$1</strong>')
+                .replace(/^\- (.*$)/gim, '<li class="ml-4 list-disc">$1</li>')
+                .replace(/\n/gim, '<br>');
+        }
+
+        // --- INTEGRAÇÃO COM MAKE (COM MODAL) ---
+        async function gerarJSONFinal() {
+            
+            // 1. URL DO MAKE
+            const webhookURL = 'https://hook.us2.make.com/gh9sln9kmdr9skpy2b6ppco538i4unoy'; 
+
+            // Feedback no botão
+            const btn = document.querySelector('#step-content-5 button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> IA PENSANDO...';
+            btn.disabled = true;
+
+            // Helpers
+            const getVal = (id) => { const el = document.getElementById(id); return el ? el.value : ""; };
+            const getTags = (containerId) => {
+                const container = document.getElementById(containerId);
+                if(!container) return [];
+                return Array.from(container.querySelectorAll('.selected-tag')).map(t => t.innerText);
+            };
+            const links = Array.from(document.querySelectorAll('.url-text')).map(el => el.innerText);
+            const analysisLevel = document.querySelector('input[name="analysis_level"]:checked')?.value || "Padrão";
+
+            // Payload JSON
+            const payload = {
+                missao: {
+                    tipo: getVal('business-type'),
+                    segmento: getVal('business-segment'),
+                    campanha: document.querySelector('#campaign-container .selected h3')?.innerText || "",
+                    objetivo: document.querySelector('#objective-container .selected')?.innerText || ""
+                },
+                empresa: {
+                    nome: getVal('empresa_nome'),
+                    descricao: getVal('empresa_descricao'),
+                    diferenciais: getTags('container-diferenciais'),
+                    tomVoz: getVal('empresa_tom_estilo'),
+                    posicionamento: getVal('empresa_posicionamento')
+                },
+                publico: {
+                    idade: getVal('publico_idade'),
+                    genero: getVal('publico_genero'),
+                    local: getVal('publico_local'),
+                    interesses: getTags('container-interesses'),
+                    persona: getVal('publico_persona'),
+                    dores: { tags: getTags('container-dores'), texto: getVal('publico_dores_txt') },
+                    desejos: { tags: getTags('container-desejos'), texto: getVal('publico_desejos_txt') }
+                },
+                concorrencia: {
+                    estrategias: getVal('concorrencia_estrategias'),
+                    analise: analysisLevel,
+                    diferenciaisDeles: getTags('container-diff-concorrente'),
+                    pontosFracosDeles: getTags('container-fraco-concorrente')
+                }
+            };
+
+            console.log("Enviando:", payload);
+
+            try {
+                const response = await fetch(webhookURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const textoIA = await response.text();
+                    
+                    // Formata e abre o Modal
+                    const htmlContent = formatMarkdown(textoIA);
+                    openModal(htmlContent);
+
+                } else {
+                    alert("Erro no Make: " + response.status);
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("Erro de conexão! Verifique se o Live Server está rodando.");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

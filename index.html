@@ -60,8 +60,7 @@
         .dark .chip-tag:hover { border-color: #FF4D00; color: #FF4D00; }
         .chip-tag.active { background-color: #FF4D00; color: white; border-color: #FF4D00; }
         .dark .chip-tag.active { background-color: #FF4D00; border-color: #FF4D00; color: white; }
-        .selected-tag { } 
-
+        
         .input-clean { width: 100%; padding: 0.75rem 1rem; border-radius: 0.5rem; border: 1px solid #d1d5db; outline: none; transition: ring 0.2s; background-color: white; color: #1f2937; }
         .dark .input-clean { background-color: #334155; border-color: #475569; color: #f3f4f6; }
         .input-clean:focus { ring: 2px; ring-color: #fb923c; border-color: transparent; }
@@ -80,10 +79,17 @@
 </head>
 <body class="h-screen flex overflow-hidden text-gray-800 bg-slate-50 dark:bg-darkbg-900 dark:text-gray-100">
 
-    <aside class="w-72 bg-white dark:bg-darkbg-800 border-r border-gray-200 dark:border-darkbg-700 flex flex-col h-full z-20 shadow-lg flex-shrink-0 transition-colors duration-300">
-        <div class="p-6 border-b border-gray-100 dark:border-darkbg-700 flex items-center space-x-2">
-            <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center text-white shadow-md"><i class="fa-solid fa-infinity"></i></div>
-            <span class="font-bold text-xl tracking-tight text-gray-900 dark:text-white">Centauri<span class="text-primary-600">AI</span></span>
+    <div id="mobile-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
+
+    <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white dark:bg-darkbg-800 border-r border-gray-200 dark:border-darkbg-700 flex flex-col h-full z-30 shadow-lg transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out md:relative flex-shrink-0">
+        <div class="p-6 border-b border-gray-100 dark:border-darkbg-700 flex items-center justify-between md:justify-start space-x-2">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center text-white shadow-md"><i class="fa-solid fa-infinity"></i></div>
+                <span class="font-bold text-xl tracking-tight text-gray-900 dark:text-white">Centauri<span class="text-primary-600">AI</span></span>
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-gray-500 hover:text-primary-600">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
         </div>
         <nav class="flex-1 overflow-y-auto py-4">
             <ul class="space-y-1">
@@ -100,31 +106,37 @@
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-full relative overflow-hidden">
-        <header class="bg-white dark:bg-darkbg-800 border-b border-gray-200 dark:border-darkbg-700 flex items-center justify-between h-24 px-10 shadow-sm z-10 flex-shrink-0 transition-colors duration-300">
-            <div class="flex items-center">
-                <h1 class="text-xl font-bold text-gray-800 dark:text-white mr-6" id="header-title">Novo Planejamento Estratégico</h1>
-                 <div class="text-sm text-primary-700 dark:text-primary-400 bg-primary-50 dark:bg-darkbg-700 px-4 py-1.5 rounded-full font-medium border border-primary-100 dark:border-darkbg-600">
-                    <i class="fa-solid fa-brain mr-1"></i> <span id="header-module">Módulo 1: Briefing Inteligente</span>
+    <main class="flex-1 flex flex-col h-full relative overflow-hidden w-full">
+        <header class="bg-white dark:bg-darkbg-800 border-b border-gray-200 dark:border-darkbg-700 flex items-center justify-between h-auto py-4 px-4 md:px-10 md:h-24 shadow-sm z-10 flex-shrink-0 transition-colors duration-300">
+            <div class="flex items-center gap-3 md:gap-6 flex-1">
+                <button onclick="toggleSidebar()" class="md:hidden text-gray-500 hover:text-primary-600 p-2">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+
+                <div class="flex flex-col md:flex-row md:items-center">
+                    <h1 class="text-lg md:text-xl font-bold text-gray-800 dark:text-white md:mr-6 leading-tight" id="header-title">Novo Planejamento</h1>
+                    <div class="hidden sm:inline-block text-xs md:text-sm text-primary-700 dark:text-primary-400 bg-primary-50 dark:bg-darkbg-700 px-3 py-1 rounded-full font-medium border border-primary-100 dark:border-darkbg-600 mt-1 md:mt-0 w-fit">
+                        <i class="fa-solid fa-brain mr-1"></i> <span id="header-module">Briefing Inteligente</span>
+                    </div>
                 </div>
             </div>
-           
-            <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-darkbg-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-darkbg-600 transition-colors focus:outline-none border border-transparent dark:border-gray-600 flex items-center justify-center">
+            
+            <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-darkbg-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-darkbg-600 transition-colors focus:outline-none border border-transparent dark:border-gray-600 flex items-center justify-center flex-shrink-0">
                 <i class="fa-solid fa-sun hidden dark:inline-block text-yellow-400"></i>
                 <i class="fa-solid fa-moon inline-block dark:hidden"></i>
             </button>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-8 bg-slate-50 dark:bg-darkbg-900 transition-colors duration-300" id="main-scroll-area">
-            <div class="max-w-5xl mx-auto space-y-8 fade-in relative pb-16">
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-50 dark:bg-darkbg-900 transition-colors duration-300" id="main-scroll-area">
+            <div class="max-w-5xl mx-auto space-y-6 md:space-y-8 fade-in relative pb-16">
                 
                 <div id="step-content-1">
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
-                        <div class="flex items-center mb-6">
-                            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-500 rounded-full flex items-center justify-center mr-3 font-bold">1</div>
-                            <h2 class="text-xl font-bold text-gray-800 dark:text-white">Qual o perfil do negócio?</h2>
+                    <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-6 md:mb-8 transition-colors">
+                        <div class="flex items-center mb-4 md:mb-6">
+                            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-500 rounded-full flex items-center justify-center mr-3 font-bold flex-shrink-0">1</div>
+                            <h2 class="text-lg md:text-xl font-bold text-gray-800 dark:text-white">Qual o perfil do negócio?</h2>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tipo de Negócio (Macro)</label>
                                 <div class="relative">
@@ -144,10 +156,10 @@
                         </div>
                     </section>
 
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
-                        <div class="flex items-center mb-6">
-                            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-500 rounded-full flex items-center justify-center mr-3 font-bold">2</div>
-                            <h2 class="text-xl font-bold text-gray-800 dark:text-white">Como será a ativação da campanha?</h2>
+                    <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-6 md:mb-8 transition-colors">
+                        <div class="flex items-center mb-4 md:mb-6">
+                            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-500 rounded-full flex items-center justify-center mr-3 font-bold flex-shrink-0">2</div>
+                            <h2 class="text-lg md:text-xl font-bold text-gray-800 dark:text-white">Como será a ativação da campanha?</h2>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="campaign-container">
                             <div class="option-card bg-white p-5 rounded-xl cursor-pointer relative" onclick="selectCampaignType(this, 'offline')">
@@ -177,70 +189,70 @@
                         </div>
                     </section>
 
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                    <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-6 md:mb-8 transition-colors">
                         <div class="flex items-center mb-2">
-                            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-500 rounded-full flex items-center justify-center mr-3 font-bold">3</div>
-                            <h2 class="text-xl font-bold text-gray-800 dark:text-white">Qual o objetivo principal?</h2>
+                            <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-500 rounded-full flex items-center justify-center mr-3 font-bold flex-shrink-0">3</div>
+                            <h2 class="text-lg md:text-xl font-bold text-gray-800 dark:text-white">Qual o objetivo principal?</h2>
                         </div>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 ml-11">Selecione o foco prioritário. O sistema ajustará o tom e as KPIs.</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 ml-11">Selecione o foco prioritário.</p>
                         
-                        <div class="space-y-6 ml-11" id="objective-container">
+                        <div class="space-y-6 md:ml-11" id="objective-container">
                             <div>
                                 <h4 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 flex items-center"><i class="fa-solid fa-cash-register mr-2"></i> Foco em Vendas</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Aumentar vendas imediatas</button>
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Gerar fluxo para loja física</button>
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Aumentar conversão e-commerce</button>
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Promover ofertas específicas</button>
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Estimular recompra</button>
+                                <div class="flex flex-wrap gap-2 md:gap-3">
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Aumentar vendas imediatas</button>
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Gerar fluxo para loja física</button>
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Aumentar conversão e-commerce</button>
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Promover ofertas específicas</button>
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Estimular recompra</button>
                                 </div>
                             </div>
                             <div>
                                 <h4 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 flex items-center"><i class="fa-solid fa-magnet mr-2"></i> Foco em Atração & Leads</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Gerar Leads Qualificados</button>
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Aumentar lista de CRM</button>
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Trazer novos clientes</button>
+                                <div class="flex flex-wrap gap-2 md:gap-3">
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Gerar Leads Qualificados</button>
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Aumentar lista de CRM</button>
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Trazer novos clientes</button>
                                 </div>
                             </div>
-                            <div>
+                             <div>
                                 <h4 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 flex items-center"><i class="fa-solid fa-star mr-2"></i> Foco em Marca & Branding</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Reforçar Autoridade</button>
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Lançamento de Coleção/Identidade</button>
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Fortalecer Posicionamento</button>
+                                <div class="flex flex-wrap gap-2 md:gap-3">
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Reforçar Autoridade</button>
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Lançamento de Coleção/Identidade</button>
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Fortalecer Posicionamento</button>
                                 </div>
                             </div>
                             <div>
                                 <h4 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 flex items-center"><i class="fa-solid fa-calendar-day mr-2"></i> Eventos & Sazonalidade</h4>
-                                <div class="flex flex-wrap gap-3">
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Black Friday / Sazonal</button>
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Inauguração de Loja</button>
-                                    <button class="obj-tag px-4 py-2 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300" onclick="selectObjective(this)">Liquidação Relâmpago</button>
+                                <div class="flex flex-wrap gap-2 md:gap-3">
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Black Friday / Sazonal</button>
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Inauguração de Loja</button>
+                                    <button class="obj-tag px-3 py-2 md:px-4 rounded-lg border border-gray-200 dark:border-darkbg-700 text-sm font-medium text-gray-600 dark:text-gray-300 flex-grow md:flex-grow-0" onclick="selectObjective(this)">Liquidação Relâmpago</button>
                                 </div>
                             </div>
                         </div>
                     </section>
 
                     <div class="flex justify-end pt-6 pb-12">
-                        <button onclick="goToStep(2)" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center">
+                        <button onclick="goToStep(2)" class="w-full md:w-auto bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center">
                             Salvar e Continuar <i class="fa-solid fa-arrow-right ml-3"></i>
                         </button>
                     </div>
                 </div>
 
                 <div id="step-content-2" class="hidden-step">
-                    <div class="flex items-center justify-between mb-6">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Informações da Empresa</h2>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">A IA estudará estes dados para criar o DNA da marca e a estratégia.</p>
+                            <h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Informações da Empresa</h2>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">A IA estudará estes dados para criar o DNA da marca.</p>
                         </div>
-                        <div class="bg-primary-50 dark:bg-darkbg-700 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-lg text-xs font-bold border border-primary-100 dark:border-darkbg-600">
+                        <div class="bg-primary-50 dark:bg-darkbg-700 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-lg text-xs font-bold border border-primary-100 dark:border-darkbg-600 w-full md:w-auto text-center">
                             <i class="fa-solid fa-robot mr-2"></i>IA Learning Ativado
                         </div>
                     </div>
 
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                    <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
                         <div class="grid grid-cols-1 gap-6">
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Nome da Empresa</label>
@@ -248,80 +260,75 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Descrição da Empresa (Quem somos)</label>
-                                <textarea id="empresa_descricao" class="input-clean h-24" placeholder="Descreva de forma clara o que sua empresa faz, para quem vende e como funciona..."></textarea>
-                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-1 text-right">Mínimo 50 caracteres</p>
+                                <textarea id="empresa_descricao" class="input-clean h-24" placeholder="Descreva de forma clara o que sua empresa faz..."></textarea>
                             </div>
                             <div id="container-diferenciais">
-                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Diferenciais Competitivos (Selecione)</label>
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Diferenciais Competitivos</label>
                                 <div class="flex flex-wrap gap-2">
-                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Preço competitivo</span>
-                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Atendimento especializado</span>
-                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Entrega rápida</span>
-                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Produto exclusivo</span>
-                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Pós-venda forte</span>
-                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Variedade de mix</span>
-                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Garantia ampliada</span>
-                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Loja Física + Online</span>
-                                    <span class="chip-tag rounded-full px-4 py-2 text-sm" onclick="toggleTag(this)">Experiência premium</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Preço competitivo</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Atendimento especializado</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Entrega rápida</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Produto exclusivo</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Pós-venda forte</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Variedade de mix</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Garantia ampliada</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Loja Física + Online</span>
+                                    <span class="chip-tag rounded-full px-4 py-2 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Experiência premium</span>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                    <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="col-span-2 md:col-span-1">
-                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Tom de Voz da Marca</label>
-                                <div class="relative">
-                                    <select id="empresa_tom_estilo" class="input-clean appearance-none cursor-pointer">
-                                        <option selected disabled>Selecione o tom...</option>
-                                        <option>Profissional</option>
-                                        <option>Divertido</option>
-                                        <option>Consultivo</option>
-                                        <option>Premium</option>
-                                        <option>Energético</option>
-                                        <option>Inspirador</option>
-                                        <option>Técnico</option>
-                                        <option>Simples e direto</option>
-                                        <option>Humanizado</option>
-                                        <option>Jovem e descolado</option>
-                                    </select>
-                                </div>
-                                <input type="text" id="empresa_tom_exemplo" class="input-clean mt-3 text-sm" placeholder="Ex: Usamos gírias, somos muito formais...">
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Tom de Voz</label>
+                                <select id="empresa_tom_estilo" class="input-clean appearance-none cursor-pointer mb-3">
+                                    <option selected disabled>Selecione...</option>
+                                    <option>Profissional</option>
+                                    <option>Divertido</option>
+                                    <option>Consultivo</option>
+                                    <option>Premium</option>
+                                    <option>Energético</option>
+                                    <option>Inspirador</option>
+                                    <option>Técnico</option>
+                                    <option>Simples e direto</option>
+                                    <option>Humanizado</option>
+                                    <option>Jovem e descolado</option>
+                                </select>
+                                <input type="text" id="empresa_tom_exemplo" class="input-clean text-sm" placeholder="Ex: Usamos gírias...">
                             </div>
                             <div class="col-span-2 md:col-span-1">
-                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Posicionamento de Mercado</label>
-                                <textarea id="empresa_posicionamento" class="input-clean h-32" placeholder="Como quer ser percebido? (Ex: O mais barato, O mais rápido, O de maior qualidade...)"></textarea>
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Posicionamento</label>
+                                <textarea id="empresa_posicionamento" class="input-clean h-32" placeholder="Como quer ser percebido?"></textarea>
                             </div>
                             <div class="col-span-2">
                                 <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Público-Alvo (Resumo)</label>
-                                <textarea id="empresa_publico_resumo" class="input-clean h-20" placeholder="Quem é o cliente ideal? Idade, região, necessidades, dores..."></textarea>
+                                <textarea id="empresa_publico_resumo" class="input-clean h-20" placeholder="Quem é o cliente ideal?"></textarea>
                             </div>
                         </div>
                     </section>
 
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
-                        <div class="mb-4">
-                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Links Úteis para a IA Estudar</label>
+                    <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                         <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Links Úteis</label>
                             <div class="flex gap-2 mb-4">
-                                <input type="text" id="link-input" class="input-clean" placeholder="Cole a URL aqui (Site, Instagram, LP, Concorrente)...">
-                                <button onclick="addLink()" class="bg-primary-100 dark:bg-darkbg-700 hover:bg-primary-200 dark:hover:bg-darkbg-600 text-primary-700 dark:text-primary-400 px-6 rounded-lg font-medium transition-colors">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
+                                <input type="text" id="link-input" class="input-clean" placeholder="Cole a URL...">
+                                <button onclick="addLink()" class="bg-primary-100 dark:bg-darkbg-700 hover:bg-primary-200 text-primary-700 px-6 rounded-lg font-medium"><i class="fa-solid fa-plus"></i></button>
                             </div>
                             <div id="links-list" class="space-y-2"></div>
                         </div>
                         <div class="border-t border-gray-100 dark:border-darkbg-700 pt-6 mt-6">
-                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Restrições e Observações</label>
-                            <textarea id="empresa_restricoes" class="input-clean h-24 bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-900/30 dark:text-red-100" placeholder="O que NÃO podemos falar? Regras legais, palavras proibidas..."></textarea>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Restrições</label>
+                            <textarea id="empresa_restricoes" class="input-clean h-24 bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-900/30" placeholder="O que NÃO podemos falar?"></textarea>
                         </div>
                     </section>
 
-                    <div class="flex justify-between pt-6 pb-12">
-                        <button onclick="goToStep(1)" class="px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-darkbg-700 transition-colors">
+                    <div class="flex flex-col-reverse md:flex-row justify-between pt-6 pb-12 gap-3">
+                        <button onclick="goToStep(1)" class="w-full md:w-auto px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 transition-colors">
                             Voltar
                         </button>
-                        <button onclick="goToStep(3)" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center">
+                        <button onclick="goToStep(3)" class="w-full md:w-auto bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center">
                             Salvar e Continuar <i class="fa-solid fa-arrow-right ml-3"></i>
                         </button>
                     </div>
@@ -330,58 +337,52 @@
                 <div id="step-content-3" class="hidden-step">
                     <div class="flex items-center justify-between mb-6">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Mapeamento do Público-Alvo</h2>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Quanto mais detalhes, mais persuasiva será a Copy gerada pela IA.</p>
+                            <h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Mapeamento do Público</h2>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Quanto mais detalhes, melhor.</p>
                         </div>
                     </div>
 
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
-                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center"><i class="fa-solid fa-id-card mr-2 text-primary-600 dark:text-primary-500"></i> Dados Demográficos</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center"><i class="fa-solid fa-id-card mr-2 text-primary-600"></i> Dados Demográficos</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Faixa Etária</label>
                                 <input type="text" id="publico_idade" class="input-clean" placeholder="Ex: 25 a 45 anos">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Gênero</label>
-                                <div class="relative">
-                                    <select id="publico_genero" class="input-clean appearance-none cursor-pointer">
-                                        <option>Todos</option>
-                                        <option>Masculino</option>
-                                        <option>Feminino</option>
-                                        <option>Majoritariamente Feminino</option>
-                                        <option>Majoritariamente Masculino</option>
-                                    </select>
-                                </div>
+                                <select id="publico_genero" class="input-clean appearance-none cursor-pointer">
+                                    <option>Todos</option>
+                                    <option>Masculino</option>
+                                    <option>Feminino</option>
+                                    <option>Majoritariamente Feminino</option>
+                                    <option>Majoritariamente Masculino</option>
+                                </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Localização</label>
-                                <input type="text" id="publico_local" class="input-clean" placeholder="Ex: Brasil (Capitais) ou Fortaleza-CE">
+                                <input type="text" id="publico_local" class="input-clean" placeholder="Ex: Fortaleza-CE">
                             </div>
-                            <div>
+                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Faixa de Renda</label>
-                                <div class="relative">
-                                    <select id="publico_renda" class="input-clean appearance-none cursor-pointer">
-                                        <option disabled selected>Selecione...</option>
-                                        <option>Classe C/D (Econômico)</option>
-                                        <option>Classe C (Médio)</option>
-                                        <option>Classe B (Médio-Alto)</option>
-                                        <option>Classe A (Alto Padrão)</option>
-                                        <option>Luxo / Ultra High</option>
-                                    </select>
-                                </div>
+                                <select id="publico_renda" class="input-clean appearance-none cursor-pointer">
+                                    <option disabled selected>Selecione...</option>
+                                    <option>Classe C/D (Econômico)</option>
+                                    <option>Classe C (Médio)</option>
+                                    <option>Classe B (Médio-Alto)</option>
+                                    <option>Classe A (Alto Padrão)</option>
+                                    <option>Luxo / Ultra High</option>
+                                </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estado Civil</label>
-                                <div class="relative">
-                                    <select id="publico_civil" class="input-clean appearance-none cursor-pointer">
-                                        <option disabled selected>Selecione...</option>
-                                        <option>Indiferente</option>
-                                        <option>Solteiros</option>
-                                        <option>Casados / Com filhos</option>
-                                        <option>Divorciados</option>
-                                    </select>
-                                </div>
+                                <select id="publico_civil" class="input-clean appearance-none cursor-pointer">
+                                    <option disabled selected>Selecione...</option>
+                                    <option>Indiferente</option>
+                                    <option>Solteiros</option>
+                                    <option>Casados / Com filhos</option>
+                                    <option>Divorciados</option>
+                                </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profissão (Opcional)</label>
@@ -390,57 +391,56 @@
                         </div>
                     </section>
 
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                    <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
                         <div class="grid grid-cols-1 gap-8">
                             <div id="container-interesses">
                                 <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Principais Interesses</label>
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Tecnologia</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Compras online</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Casa & decoração</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Fitness</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Gastronomia</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Moda</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Maternidade</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Games</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Promoções</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Tecnologia</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Compras online</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Casa & decoração</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Fitness</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Gastronomia</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Moda</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Maternidade</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Games</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Promoções</span>
                                 </div>
                                 <input type="text" class="input-clean text-sm" placeholder="Outros interesses (separe por vírgula)...">
                             </div>
-
-                            <div id="container-comportamentos">
+                             <div id="container-comportamentos">
                                 <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Comportamentos de Consumo</label>
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Pesquisador de preço</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Compra impulsiva</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Valoriza parcelamento</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Consome Instagram/TikTok</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Assiste Reviews</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Prefere loja física</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Sensível a desconto</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-sm" onclick="toggleTag(this)">Busca conveniência</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Pesquisador de preço</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Compra impulsiva</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Valoriza parcelamento</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Consome Instagram/TikTok</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Assiste Reviews</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Prefere loja física</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Sensível a desconto</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-sm flex-grow md:flex-grow-0 text-center" onclick="toggleTag(this)">Busca conveniência</span>
                                 </div>
                                 <input type="text" class="input-clean text-sm" placeholder="Outros comportamentos...">
                             </div>
                         </div>
                     </section>
 
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
-                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2 flex items-center"><i class="fa-solid fa-user-pen mr-2 text-primary-600 dark:text-primary-500"></i> Persona (Avatar)</h3>
+                     <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2 flex items-center"><i class="fa-solid fa-user-pen mr-2 text-primary-600"></i> Persona (Avatar)</h3>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Descreva um personagem que represente seu cliente ideal.</p>
-                        <textarea id="publico_persona" class="input-clean h-32" placeholder="Ex: Maria, 37 anos, mãe de dois filhos. Trabalha fora e busca praticidade para cuidar da casa. Gosta de promoções, mas não abre mão de qualidade..."></textarea>
+                        <textarea id="publico_persona" class="input-clean h-32" placeholder="Ex: Maria, 37 anos, mãe de dois filhos..."></textarea>
                     </section>
 
-                    <section class="bg-gradient-to-r from-primary-50 to-white dark:from-darkbg-800 dark:to-darkbg-900 p-6 rounded-xl shadow-sm border border-primary-100 dark:border-darkbg-700 mb-8 transition-colors">
+                    <section class="bg-gradient-to-r from-primary-50 to-white dark:from-darkbg-800 dark:to-darkbg-900 p-4 md:p-6 rounded-xl shadow-sm border border-primary-100 dark:border-darkbg-700 mb-8 transition-colors">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div id="container-dores">
                                 <label class="block text-sm font-bold text-red-600 dark:text-red-400 mb-3"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Dores e Dificuldades</label>
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-red-400 hover:text-red-500 dark:hover:text-red-400" onclick="toggleTag(this, 'red')">Falta de tempo</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-red-400 hover:text-red-500 dark:hover:text-red-400" onclick="toggleTag(this, 'red')">Falta de dinheiro</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-red-400 hover:text-red-500 dark:hover:text-red-400" onclick="toggleTag(this, 'red')">Dúvida na escolha</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-red-400 hover:text-red-500 dark:hover:text-red-400" onclick="toggleTag(this, 'red')">Entrega demorada</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-red-400 hover:text-red-500 dark:hover:text-red-400" onclick="toggleTag(this, 'red')">Medo de errar</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:text-red-500" onclick="toggleTag(this, 'red')">Falta de tempo</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:text-red-500" onclick="toggleTag(this, 'red')">Falta de dinheiro</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:text-red-500" onclick="toggleTag(this, 'red')">Dúvida na escolha</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:text-red-500" onclick="toggleTag(this, 'red')">Entrega demorada</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:text-red-500" onclick="toggleTag(this, 'red')">Medo de errar</span>
                                 </div>
                                 <textarea id="publico_dores_txt" class="input-clean h-24" placeholder="Quais problemas seu produto resolve?"></textarea>
                             </div>
@@ -448,44 +448,37 @@
                             <div id="container-desejos">
                                 <label class="block text-sm font-bold text-green-600 dark:text-green-400 mb-3"><i class="fa-solid fa-star mr-1"></i> Desejos e Aspirações</label>
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-green-400 hover:text-green-500 dark:hover:text-green-400" onclick="toggleTag(this, 'green')">Segurança</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-green-400 hover:text-green-500 dark:hover:text-green-400" onclick="toggleTag(this, 'green')">Custo-benefício</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-green-400 hover:text-green-500 dark:hover:text-green-400" onclick="toggleTag(this, 'green')">Status</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-green-400 hover:text-green-500 dark:hover:text-green-400" onclick="toggleTag(this, 'green')">Conforto</span>
-                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:border-green-400 hover:text-green-500 dark:hover:text-green-400" onclick="toggleTag(this, 'green')">Praticidade</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:text-green-500" onclick="toggleTag(this, 'green')">Segurança</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:text-green-500" onclick="toggleTag(this, 'green')">Custo-benefício</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:text-green-500" onclick="toggleTag(this, 'green')">Status</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:text-green-500" onclick="toggleTag(this, 'green')">Conforto</span>
+                                    <span class="chip-tag rounded-full px-3 py-1 text-xs hover:text-green-500" onclick="toggleTag(this, 'green')">Praticidade</span>
                                 </div>
                                 <textarea id="publico_desejos_txt" class="input-clean h-24" placeholder="O que ele ganha comprando de você?"></textarea>
                             </div>
                         </div>
                     </section>
 
-                    <div class="flex justify-between pt-6 pb-12">
-                        <button onclick="goToStep(2)" class="px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-darkbg-700 transition-colors">
-                            Voltar
-                        </button>
-                        <button onclick="goToStep(4)" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center">
-                            Salvar e Continuar <i class="fa-solid fa-arrow-right ml-3"></i>
-                        </button>
+                    <div class="flex flex-col-reverse md:flex-row justify-between pt-6 pb-12 gap-3">
+                        <button onclick="goToStep(2)" class="w-full md:w-auto px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 transition-colors">Voltar</button>
+                        <button onclick="goToStep(4)" class="w-full md:w-auto bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center">Salvar e Continuar <i class="fa-solid fa-arrow-right ml-3"></i></button>
                     </div>
                 </div>
 
                 <div id="step-content-4" class="hidden-step">
-                    <div class="flex items-center justify-between mb-6">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Análise de Concorrência</h2>
+                            <h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Análise de Concorrência</h2>
                             <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">O CentauriAI mapeará ameaças e oportunidades para criar uma estratégia superior.</p>
                         </div>
-                        <div class="flex items-center bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-4 py-2 rounded-lg text-xs font-bold border border-blue-100 dark:border-blue-800">
+                         <div class="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-4 py-2 rounded-lg text-xs font-bold border border-blue-100 dark:border-blue-800 w-full md:w-auto text-center">
                             <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Auto-SWOT: Ativado
                         </div>
                     </div>
 
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
-                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center">
-                            <i class="fa-solid fa-users-viewfinder mr-2 text-primary-600 dark:text-primary-500"></i> Lista de Concorrentes
-                        </h3>
-                        
-                        <div class="bg-gray-50 dark:bg-darkbg-700/50 p-5 rounded-xl border border-gray-200 dark:border-darkbg-600 mb-4 transition-colors">
+                     <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center"><i class="fa-solid fa-users-viewfinder mr-2 text-primary-600"></i> Lista de Concorrentes</h3>
+                        <div class="bg-gray-50 dark:bg-darkbg-700/50 p-4 rounded-xl border border-gray-200 dark:border-darkbg-600 mb-4 transition-colors">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1">Nome do Concorrente</label>
@@ -510,18 +503,14 @@
                                     </select>
                                 </div>
                             </div>
-                            <button class="text-sm text-primary-600 dark:text-primary-500 font-bold hover:text-primary-800 dark:hover:text-primary-400 flex items-center transition-colors">
-                                <i class="fa-solid fa-plus-circle mr-2"></i> Adicionar Outro Concorrente
-                            </button>
+                            <button class="text-sm text-primary-600 font-bold flex items-center"><i class="fa-solid fa-plus-circle mr-2"></i> Adicionar Outro Concorrente</button>
                         </div>
                     </section>
 
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div id="container-diff-concorrente">
-                                <label class="block text-sm font-bold text-gray-800 dark:text-white mb-3">
-                                    <i class="fa-solid fa-thumbs-up text-green-500 mr-1"></i> Diferenciais Percebidos (Deles)
-                                </label>
+                                <label class="block text-sm font-bold text-gray-800 dark:text-white mb-3"><i class="fa-solid fa-thumbs-up text-green-500 mr-1"></i> Diferenciais Percebidos (Deles)</label>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">O que eles têm de forte?</p>
                                 <div class="flex flex-wrap gap-2 mb-3">
                                     <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Preço Baixo</span>
@@ -533,11 +522,8 @@
                                 </div>
                                 <textarea id="concorrente_diff_txt" class="input-clean h-20 text-sm" placeholder="Detalhe algo se necessário..."></textarea>
                             </div>
-
-                            <div id="container-fraco-concorrente">
-                                <label class="block text-sm font-bold text-gray-800 dark:text-white mb-3">
-                                    <i class="fa-solid fa-thumbs-down text-red-500 mr-1"></i> Pontos Fracos (Brechas)
-                                </label>
+                             <div id="container-fraco-concorrente">
+                                <label class="block text-sm font-bold text-gray-800 dark:text-white mb-3"><i class="fa-solid fa-thumbs-down text-red-500 mr-1"></i> Pontos Fracos (Brechas)</label>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Onde podemos atacar?</p>
                                 <div class="flex flex-wrap gap-2 mb-3">
                                     <span class="chip-tag rounded-full px-3 py-1 text-xs" onclick="toggleTag(this)">Preços inconsistentes</span>
@@ -549,18 +535,17 @@
                                 </div>
                                 <textarea id="concorrente_fraco_txt" class="input-clean h-20 text-sm" placeholder="Outras falhas percebidas..."></textarea>
                             </div>
-                        </div>
+                         </div>
                     </section>
-
-                    <section class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
+                    
+                     <section class="bg-white dark:bg-darkbg-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700 mb-8 transition-colors">
                         <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Estratégias Visíveis</h3>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Descreva as campanhas, ações e narrativas que você já percebeu neles.</p>
                         <textarea id="concorrencia_estrategias" class="input-clean h-32" placeholder="Ex: Eles fazem muita live no Instagram, usam influenciadores locais e focam muito em 'bota-fora' de estoque..."></textarea>
                     </section>
 
-                    <section class="bg-gray-50 dark:bg-darkbg-700/50 p-6 rounded-xl border border-gray-200 dark:border-darkbg-600 mb-8 transition-colors">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            
+                    <section class="bg-gray-50 dark:bg-darkbg-700/50 p-4 md:p-6 rounded-xl border border-gray-200 dark:border-darkbg-600 mb-8 transition-colors">
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div>
                                 <label class="block text-sm font-bold text-gray-800 dark:text-white mb-4">Prioridade da Análise</label>
                                 <div class="space-y-3" id="container-analise">
@@ -577,7 +562,7 @@
                                             <span class="block text-xs text-gray-500 dark:text-gray-400">Posicionamento + Diferenciais</span>
                                         </div>
                                     </label>
-                                    <label class="flex items-center p-3 bg-white dark:bg-darkbg-800 border border-gray-200 dark:border-darkbg-600 rounded-lg cursor-pointer hover:border-primary-400 transition-all">
+                                     <label class="flex items-center p-3 bg-white dark:bg-darkbg-800 border border-gray-200 dark:border-darkbg-600 rounded-lg cursor-pointer hover:border-primary-400 transition-all">
                                         <input type="radio" name="analysis_level" value="Avançada" class="text-primary-600 focus:ring-primary-500">
                                         <div class="ml-3">
                                             <span class="block text-sm font-bold text-gray-700 dark:text-gray-200">🧠 Avançada (Deep Dive)</span>
@@ -586,7 +571,7 @@
                                     </label>
                                 </div>
                             </div>
-
+                            
                             <div>
                                 <label class="block text-sm font-bold text-gray-800 dark:text-white mb-2">Links Adicionais para Estudo</label>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Catálogos, Ad Library, Landing Pages...</p>
@@ -600,38 +585,32 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                         </div>
                     </section>
 
-                    <div class="flex justify-between pt-6 pb-12">
-                        <button onclick="goToStep(3)" class="px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-darkbg-700 transition-colors">
-                            Voltar
-                        </button>
-                        <button onclick="goToStep(5)" class="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center">
+                    <div class="flex flex-col-reverse md:flex-row justify-between pt-6 pb-12 gap-3">
+                        <button onclick="goToStep(3)" class="w-full md:w-auto px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 transition-colors">Voltar</button>
+                        <button onclick="goToStep(5)" class="w-full md:w-auto bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center">
                             <i class="fa-solid fa-chess-board mr-3 text-primary-200"></i> Gerar Matriz Competitiva
                         </button>
                     </div>
                 </div>
 
                 <div id="step-content-5" class="hidden-step">
-                    
-                    <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-xl p-8 text-white shadow-lg mb-8 flex justify-between items-center">
+                    <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-xl p-6 md:p-8 text-white shadow-lg mb-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-4">
                         <div>
-                            <h2 class="text-2xl font-bold mb-1">Revisão Final da Estratégia</h2>
+                            <h2 class="text-xl md:text-2xl font-bold mb-1">Revisão Final da Estratégia</h2>
                             <p class="text-primary-100 text-sm">O CentauriAI revisou 48 pontos do seu planejamento.</p>
                         </div>
-                        <div class="text-right">
+                        <div class="text-center md:text-right">
                             <div class="text-5xl font-black tracking-tighter">88<span class="text-2xl text-primary-300 font-medium">/100</span></div>
                             <div class="text-xs font-bold uppercase tracking-wider bg-white/20 px-2 py-1 rounded inline-block mt-1">Estratégia Robusta</div>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        
                         <div class="lg:col-span-1 space-y-6">
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-white border-b border-gray-200 dark:border-darkbg-700 pb-2">
-                                Checklist de Coerência
-                            </h3>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white border-b border-gray-200 dark:border-darkbg-700 pb-2">Checklist de Coerência</h3>
                             
                             <div class="bg-white dark:bg-darkbg-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700">
                                 <h4 class="text-xs font-bold uppercase text-gray-400 mb-3 tracking-wider">Estratégia Geral</h4>
@@ -660,60 +639,38 @@
                         </div>
 
                         <div class="lg:col-span-2 space-y-8">
-                            
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="bg-green-50 dark:bg-green-900/20 p-5 rounded-xl border border-green-200 dark:border-green-800">
-                                    <div class="flex items-center mb-2 text-green-700 dark:text-green-400 font-bold">
-                                        <i class="fa-solid fa-lightbulb mr-2"></i> Pontos Fortes
-                                    </div>
-                                    <p class="text-sm text-green-800 dark:text-green-200 leading-relaxed">
-                                        Sua estratégia tem uma mensagem central forte e fácil de lembrar. A jornada do usuário está completa e bem distribuída nos canais digitais.
-                                    </p>
+                                    <div class="flex items-center mb-2 text-green-700 dark:text-green-400 font-bold"><i class="fa-solid fa-lightbulb mr-2"></i> Pontos Fortes</div>
+                                    <p class="text-sm text-green-800 dark:text-green-200 leading-relaxed">Sua estratégia tem uma mensagem central forte e fácil de lembrar. A jornada do usuário está completa e bem distribuída nos canais digitais.</p>
                                 </div>
                                 <div class="bg-yellow-50 dark:bg-yellow-900/20 p-5 rounded-xl border border-yellow-200 dark:border-yellow-800">
-                                    <div class="flex items-center mb-2 text-yellow-700 dark:text-yellow-400 font-bold">
-                                        <i class="fa-solid fa-triangle-exclamation mr-2"></i> Oportunidade
-                                    </div>
-                                    <p class="text-sm text-yellow-800 dark:text-yellow-200 leading-relaxed">
-                                        Sua segmentação está ampla demais. Sugiro adicionar comportamentos específicos de consumo. O funil está forte no topo, mas fraco na conversão.
-                                    </p>
+                                    <div class="flex items-center mb-2 text-yellow-700 dark:text-yellow-400 font-bold"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Oportunidade</div>
+                                    <p class="text-sm text-yellow-800 dark:text-yellow-200 leading-relaxed">Sua segmentação está ampla demais. Sugiro adicionar comportamentos específicos de consumo. O funil está forte no topo, mas fraco na conversão.</p>
                                 </div>
                             </div>
 
                             <div class="bg-white dark:bg-darkbg-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-darkbg-700">
                                 <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-6">Mapa de Coerência Estratégica</h3>
-                                
-                                <div class="flex flex-col md:flex-row justify-between items-center relative">
+                                <div class="flex flex-col md:flex-row justify-between items-center relative gap-6 md:gap-0">
                                     <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700 -z-0"></div>
-
-                                    <div class="relative z-10 flex flex-col items-center mb-6 md:mb-0">
-                                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-green-600 dark:text-green-400">
-                                            <i class="fa-solid fa-users"></i>
-                                        </div>
+                                    <div class="relative z-10 flex flex-col items-center">
+                                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-green-600 dark:text-green-400"><i class="fa-solid fa-users"></i></div>
                                         <span class="text-xs font-bold mt-2 text-gray-600 dark:text-gray-400 uppercase">Público</span>
                                         <span class="text-xs text-green-500 font-bold"><i class="fa-solid fa-check"></i> Validado</span>
                                     </div>
-
-                                    <div class="relative z-10 flex flex-col items-center mb-6 md:mb-0">
-                                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-green-600 dark:text-green-400">
-                                            <i class="fa-solid fa-box-open"></i>
-                                        </div>
+                                    <div class="relative z-10 flex flex-col items-center">
+                                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-green-600 dark:text-green-400"><i class="fa-solid fa-box-open"></i></div>
                                         <span class="text-xs font-bold mt-2 text-gray-600 dark:text-gray-400 uppercase">Produto</span>
                                         <span class="text-xs text-green-500 font-bold"><i class="fa-solid fa-check"></i> Validado</span>
                                     </div>
-
-                                    <div class="relative z-10 flex flex-col items-center mb-6 md:mb-0">
-                                        <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-yellow-600 dark:text-yellow-400">
-                                            <i class="fa-solid fa-comment-dots"></i>
-                                        </div>
+                                     <div class="relative z-10 flex flex-col items-center">
+                                        <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-yellow-600 dark:text-yellow-400"><i class="fa-solid fa-comment-dots"></i></div>
                                         <span class="text-xs font-bold mt-2 text-gray-600 dark:text-gray-400 uppercase">Mensagem</span>
                                         <span class="text-xs text-yellow-500 font-bold"><i class="fa-solid fa-exclamation"></i> Ajustar</span>
                                     </div>
-
                                     <div class="relative z-10 flex flex-col items-center">
-                                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-green-600 dark:text-green-400">
-                                            <i class="fa-solid fa-share-nodes"></i>
-                                        </div>
+                                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center border-4 border-white dark:border-darkbg-800 shadow-sm text-green-600 dark:text-green-400"><i class="fa-solid fa-share-nodes"></i></div>
                                         <span class="text-xs font-bold mt-2 text-gray-600 dark:text-gray-400 uppercase">Canais</span>
                                         <span class="text-xs text-green-500 font-bold"><i class="fa-solid fa-check"></i> Validado</span>
                                     </div>
@@ -737,22 +694,18 @@
                                     </button>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
-                    <div class="flex justify-between items-center pt-8 pb-12 border-t border-gray-200 dark:border-darkbg-700 mt-8">
-                        <button onclick="goToStep(4)" class="px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-darkbg-700 transition-colors">
-                            Voltar e Corrigir
-                        </button>
-                        <div class="text-right">
+                    <div class="flex flex-col-reverse md:flex-row justify-between items-center pt-8 pb-12 border-t border-gray-200 dark:border-darkbg-700 mt-8 gap-4">
+                        <button onclick="goToStep(4)" class="w-full md:w-auto px-6 py-3 rounded-lg border border-gray-300 dark:border-darkbg-600 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 transition-colors">Voltar e Corrigir</button>
+                        <div class="text-center md:text-right w-full md:w-auto">
                             <p class="text-xs text-gray-400 mb-2 mr-1">Ao clicar, seus entregáveis (PDF, Excel, ZIP) serão gerados.</p>
-                            <button onclick="gerarJSONFinal()" class="bg-gradient-to-r from-gray-900 to-black dark:from-white dark:to-gray-200 hover:shadow-xl text-white dark:text-gray-900 px-10 py-4 rounded-xl font-bold shadow-lg transition-all flex items-center transform hover:scale-105">
+                            <button onclick="gerarJSONFinal()" class="w-full md:w-auto bg-gradient-to-r from-gray-900 to-black dark:from-white dark:to-gray-200 hover:shadow-xl text-white dark:text-gray-900 px-10 py-4 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center transform hover:scale-105">
                                 <i class="fa-solid fa-rocket mr-3 text-primary-500"></i> FINALIZAR E GERAR ESTRATÉGIA
                             </button>
                         </div>
                     </div>
-
                 </div>
 
             </div>
@@ -761,14 +714,14 @@
         <div id="result-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 transition-opacity duration-300 opacity-0">
             <div class="bg-white dark:bg-darkbg-800 w-full max-w-4xl rounded-2xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden transform transition-all scale-95" id="modal-content">
                 <div class="p-6 border-b border-gray-200 dark:border-darkbg-700 flex justify-between items-center bg-gray-50 dark:bg-darkbg-900/50">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white flex items-center">
                         <i class="fa-solid fa-robot text-primary-600 mr-3"></i> Estratégia Gerada
                     </h2>
                     <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white transition-colors">
                         <i class="fa-solid fa-times text-2xl"></i>
                     </button>
                 </div>
-                <div class="p-8 overflow-y-auto text-gray-700 dark:text-gray-300 leading-relaxed ai-content" id="modal-body">
+                <div class="p-6 md:p-8 overflow-y-auto text-gray-700 dark:text-gray-300 leading-relaxed ai-content" id="modal-body">
                     <div class="flex flex-col items-center justify-center h-64 text-gray-400">
                         <i class="fa-solid fa-circle-notch fa-spin text-4xl mb-4 text-primary-500"></i>
                         <p>Aguardando resposta da Inteligência Artificial...</p>
@@ -802,6 +755,21 @@
             document.getElementById('html-root').classList.add('dark');
         }
 
+        // --- LÓGICA SIDEBAR MOBILE ---
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            
+            // Toggle sidebar translation
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
         // --- LÓGICA DE NAVEGAÇÃO ---
         function goToStep(stepNumber) {
             for(let i=1; i<=5; i++) {
@@ -815,6 +783,14 @@
                 updateSidebar(stepNumber);
                 const scrollArea = document.getElementById('main-scroll-area');
                 if(scrollArea) scrollArea.scrollTo(0,0);
+                
+                // No mobile, fecha a sidebar ao navegar
+                if(window.innerWidth < 768) {
+                   const sidebar = document.getElementById('sidebar');
+                   if(!sidebar.classList.contains('-translate-x-full')) {
+                       toggleSidebar();
+                   }
+                }
             }
         }
 
@@ -868,7 +844,7 @@
                 div.innerHTML = `
                     <div class="flex items-center overflow-hidden">
                         <i class="fa-solid fa-link text-gray-400 dark:text-gray-500 mr-3"></i>
-                        <span class="text-gray-700 dark:text-gray-200 truncate url-text">${url}</span>
+                        <span class="text-gray-700 dark:text-gray-200 truncate url-text w-full">${url}</span>
                     </div>
                     <button onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600 dark:hover:text-red-300 ml-3 transition-colors"><i class="fa-solid fa-trash"></i></button>
                 `;
@@ -921,7 +897,7 @@
             el.classList.add('selected');
         }
 
-        // --- FUNÇÕES DE MODAL (NOVO) ---
+        // --- FUNÇÕES DE MODAL ---
         function openModal(contentHTML) {
             const modal = document.getElementById('result-modal');
             const body = document.getElementById('modal-body');
@@ -963,29 +939,23 @@
                 .replace(/\n/gim, '<br>');
         }
 
-        // --- INTEGRAÇÃO COM MAKE (COM MODAL) ---
+        // --- INTEGRAÇÃO COM MAKE ---
         async function gerarJSONFinal() {
-            
-            // 1. URL DO MAKE
             const webhookURL = 'https://hook.us2.make.com/gh9sln9kmdr9skpy2b6ppco538i4unoy'; 
 
-            // Feedback no botão
             const btn = document.querySelector('#step-content-5 button');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> IA PENSANDO...';
             btn.disabled = true;
 
-            // Helpers
             const getVal = (id) => { const el = document.getElementById(id); return el ? el.value : ""; };
             const getTags = (containerId) => {
                 const container = document.getElementById(containerId);
                 if(!container) return [];
                 return Array.from(container.querySelectorAll('.selected-tag')).map(t => t.innerText);
             };
-            const links = Array.from(document.querySelectorAll('.url-text')).map(el => el.innerText);
             const analysisLevel = document.querySelector('input[name="analysis_level"]:checked')?.value || "Padrão";
 
-            // Payload JSON
             const payload = {
                 missao: {
                     tipo: getVal('business-type'),
@@ -1028,11 +998,8 @@
 
                 if (response.ok) {
                     const textoIA = await response.text();
-                    
-                    // Formata e abre o Modal
                     const htmlContent = formatMarkdown(textoIA);
                     openModal(htmlContent);
-
                 } else {
                     alert("Erro no Make: " + response.status);
                 }
